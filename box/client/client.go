@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-const ADDR = "192.168.2.14:30000"
+const ADDR = "192.168.2.14:37777"
 
 var conn net.Conn
 
