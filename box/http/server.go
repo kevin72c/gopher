@@ -6,21 +6,19 @@ import (
 	"net/http"
 )
 
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	param := r.URL.Query().Get("param")
-	fmt.Println(param)
-	client.Send(param)
-	//fmt.Fprintf(w, "hello world")
+func conn(w http.ResponseWriter, r *http.Request) {
+	client.RequireConn()
+	w.Write([]byte("ok"))
+}
+func disConn(w http.ResponseWriter, r *http.Request) {
+	client.DisConn()
 	w.Write([]byte("ok"))
 }
 
-//func sendMessage(w http.ResponseWriter, r *http.Request)  {
-//	client.Send(r.URL.Query().Get("param"))
-//}
-
 func init() {
 	fmt.Println("http server init")
-	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/conn", conn)
+	http.HandleFunc("/dis", disConn)
 	//http.HandleFunc("/send", sendMessage)
 	http.ListenAndServe(":8000", nil)
 }

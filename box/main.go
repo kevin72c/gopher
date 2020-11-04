@@ -3,9 +3,13 @@ package main
 import (
 	_ "./client"
 	_ "./http"
-	"fmt"
+	"time"
 )
 
 func main() {
-	fmt.Println("xxxx")
+
+	for {
+		time.Sleep(1000 * time.Second)
+	}
+
 }

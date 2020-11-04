@@ -1,17 +1,37 @@
 package util
 
 import (
+	"encoding/hex"
 	"fmt"
 	"net"
+	"strings"
 )
 
-func GetFirstMac() (mac string) {
+func GetIpStr(ip []byte) (ipStr string) {
+	var b strings.Builder
+	ipv4 := (ip[10] == 0 || ip[10] == 0xff) &&
+		(ip[11] == 0 || ip[11] == 0xff)
+	if ipv4 {
+		for _, e := range ip[12:16] {
+			fmt.Fprint(&b, int(e), ".")
+		}
+		ipStr = strings.TrimSuffix(b.String(), ".")
+	} else {
+		for _, e := range ip {
+			fmt.Fprint(&b, int(e), ":")
+		}
+		ipStr = strings.TrimSuffix(b.String(), ":")
+	}
+	return ipStr
+}
+func GetFirstMac() (b []byte) {
 	netInterfaces, err := net.Interfaces()
 	if err != nil {
 		fmt.Printf("fail to get net interfaces: %v", err)
-		return mac
+		return b
 	}
-	return netInterfaces[0].HardwareAddr.String()
+	b, _ = hex.DecodeString(strings.ReplaceAll(netInterfaces[0].HardwareAddr.String(), ":", ""))
+	return b
 }
 
 func GetFirstIp() (ip []byte) {

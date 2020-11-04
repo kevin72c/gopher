@@ -1,4 +1,4 @@
-package client
+package pc
 
 import (
 	"../util"
@@ -6,26 +6,26 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
+	"log"
 	"net"
 	"time"
 )
 
-const ADDR = "192.168.2.14:37777"
-
 var conn net.Conn
 
-func init() {
+func Connect(addr string, tokenArg string) {
 	var err error
-	conn, err = net.Dial("tcp", ADDR)
+	conn, err = net.Dial("tcp", addr)
+	token = tokenArg
 	if err != nil {
 		fmt.Printf("connect fail:%v\n", err)
 	} else {
 		fmt.Println(" ok")
 		handShake()
+		go read()
+		go heartbeat()
 	}
 
-	go read()
-	go heartbeat()
 }
 
 func read() {
@@ -33,9 +33,9 @@ func read() {
 		header := make([]byte, 18)
 		_, err := io.ReadFull(conn, header)
 		if err != nil {
-			//conn.Close()
-			fmt.Printf("流信息读取失败1:%v\n", err)
-			continue
+			conn.Close()
+			log.Println("流信息读取失败1", err)
+			break
 		}
 
 		p := util.Protocol{
@@ -52,9 +52,10 @@ func read() {
 		body := make([]byte, p.Len)
 		_, err = io.ReadFull(conn, body)
 		if err != nil {
-			//conn.Close()
-			fmt.Printf("流信息读取失败2:%v\n", err)
-			continue
+			conn.Close()
+			fmt.Println("流信息读取失败2", err)
+			fmt.Printf("parsing %s as HTML: %v", "x", err)
+			break
 		}
 
 		if p.Command != 2 {
@@ -73,10 +74,12 @@ func write(p util.Protocol) {
 func heartbeat() {
 	for {
 		time.Sleep(10 * time.Second)
-		hexData, _ := hex.DecodeString("7E7E5A5A02000002000000000000000000020000")
+		hexData, _ := hex.DecodeString("7E7E5A5A02010002000000000000000000020000")
 		conn.Write(hexData)
 	}
 }
+
+var token string
 
 func handShake() {
 	p := util.Protocol{
@@ -97,19 +100,9 @@ func handShake() {
 	p.Payload = append(p.Payload, serialId) // SerialID
 	firmwareVersion, _ := hex.DecodeString("00000100000000000000000000000000")
 	p.Payload = append(p.Payload, firmwareVersion) // firmware version
-	write(p)
-}
+	p.Payload = append(p.Payload, uint16(len(token)))
+	p.Payload = append(p.Payload, token)
 
-func RequireConn() {
-	p := util.Protocol{
-		Magic:      0x7e7e5a5a,
-		Src:        2,
-		Dst:        0,
-		Command:    0x0010,
-		StatusCode: 0x0000,
-		DataType:   0,
-		Reserve:    0,
-	}
 	write(p)
 }
 
