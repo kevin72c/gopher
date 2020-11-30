@@ -12,7 +12,7 @@ followed by a blank line or other line comments. */
 // Main is a special name declaring an executable rather than a library.
 package main
 
-import "./foo"
+import "gopher/foo"
 
 func main() {
 
