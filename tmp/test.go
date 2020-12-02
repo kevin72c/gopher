@@ -1,44 +1,68 @@
 package main
 
 import (
-	"log"
-	"runtime"
+	"github.com/sirupsen/logrus"
+	"os"
 )
 
-var intMap map[int]int
-var cnt = 8192
-
 func main() {
-	printMemStats()
+	var log = logrus.New()
+	log.Formatter = new(logrus.JSONFormatter)
+	//log.Formatter = new(logrus.TextFormatter)                     //default
+	//log.Formatter.(*logrus.TextFormatter).DisableColors = true    // remove colors
+	//log.Formatter.(*logrus.TextFormatter).DisableTimestamp = true // remove timestamp from test output
+	log.Level = logrus.TraceLevel
+	log.Out = os.Stdout
 
-	initMap()
-	runtime.GC()
-	printMemStats()
+	// file, err := os.OpenFile("logrus.log", os.O_CREATE|os.O_WRONLY, 0666)
+	// if err == nil {
+	// 	log.Out = file
+	// } else {
+	// 	log.Info("Failed to log to file, using default stderr")
+	// }
 
-	log.Println(len(intMap))
-	for i := 0; i < cnt; i++ {
-		delete(intMap, i)
-	}
-	log.Println(len(intMap))
+	defer func() {
+		err := recover()
+		if err != nil {
+			entry := err.(*logrus.Entry)
+			log.WithFields(logrus.Fields{
+				"omg":         true,
+				"err_animal":  entry.Data["animal"],
+				"err_size":    entry.Data["size"],
+				"err_level":   entry.Level,
+				"err_message": entry.Message,
+				"number":      100,
+			}).Error("The ice breaks!") // or use Fatal() to force the process to exit with a nonzero code
+		}
+	}()
 
-	runtime.GC()
-	printMemStats()
+	log.WithFields(logrus.Fields{
+		"animal": "walrus",
+		"number": 0,
+	}).Trace("Went to the beach")
 
-	intMap = nil
-	runtime.GC()
-	printMemStats()
-}
+	log.WithFields(logrus.Fields{
+		"animal": "walrus",
+		"number": 8,
+	}).Debug("Started observing beach")
 
-func initMap() {
-	intMap = make(map[int]int, cnt)
+	log.WithFields(logrus.Fields{
+		"animal": "walrus",
+		"size":   10,
+	}).Info("A group of walrus emerges from the ocean")
 
-	for i := 0; i < cnt; i++ {
-		intMap[i] = i
-	}
-}
+	log.WithFields(logrus.Fields{
+		"omg":    true,
+		"number": 122,
+	}).Warn("The group's number increased tremendously!")
 
-func printMemStats() {
-	var m runtime.MemStats
-	runtime.ReadMemStats(&m)
-	log.Printf("Alloc = %v TotalAlloc = %v Sys = %v NumGC = %v\n", m.Alloc/1024, m.TotalAlloc/1024, m.Sys/1024, m.NumGC)
+	log.WithFields(logrus.Fields{
+		"temperature": -4,
+	}).Debug("Temperature changes")
+
+	log.WithFields(logrus.Fields{
+		"animal": "orca",
+		"size":   9009,
+	}).Panic("It's over 9000!")
+
 }
