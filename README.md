@@ -48,6 +48,10 @@ solaris	amd64
 windows	386
 windows	amd64
 ```
+Golang交叉编译各个平台的二进制文件
 https://studygolang.com/articles/14376
 
-CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build 
+Golang交叉编译中的那些坑
+https://blog.csdn.net/Three_dog/article/details/94640507?utm_medium=distribute.pc_feed_404.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_feed_404.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecas
+
+
