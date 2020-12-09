@@ -14,15 +14,15 @@ import (
 
 // Sarama configuration options
 var (
-	brokers  = "192.168.2.14:9092"
-	version  = "2.1.1"
-	group    = "group2"
-	topics   = "t1"
-	assignor = "range"
+	brokers = "192.168.2.14:9092"
+	version = "2.1.1"
+	group   = "group1"
+	topics  = "t1"
+	//assignor = "range"
 	//assignor = "sticky"
-	//assignor = "roundrobin"
-	oldest  = true
-	verbose = false
+	assignor = "roundrobin"
+	oldest   = true
+	verbose  = false
 )
 
 //func init() {
@@ -158,7 +158,8 @@ func (consumer *Consumer) ConsumeClaim(session sarama.ConsumerGroupSession, clai
 	// The `ConsumeClaim` itself is called within a goroutine, see:
 	// https://github.com/Shopify/sarama/blob/master/consumer_group.go#L27-L29
 	for message := range claim.Messages() {
-		log.Printf("Message claimed: value = %s, timestamp = %v, topic = %s", string(message.Value), message.Timestamp, message.Topic)
+		log.Printf("Message claimed: value = %s, timestamp = %v, topic = %s",
+			string(message.Value), message.Timestamp, message.Topic)
 		session.MarkMessage(message, "")
 	}
 
