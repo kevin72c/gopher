@@ -1,10 +1,10 @@
 package client
 
 import (
-	"../pc"
-	"../util"
 	"encoding/binary"
 	"fmt"
+	"gopher/box/pc"
+	"gopher/box/util"
 	"log"
 	"reflect"
 	"strconv"

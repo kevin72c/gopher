@@ -1,10 +1,10 @@
 package pc
 
 import (
-	"../util"
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
+	"gopher/box/util"
 	"io"
 	"log"
 	"net"

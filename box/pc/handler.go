@@ -1,8 +1,8 @@
 package pc
 
 import (
-	"../util"
 	"fmt"
+	"gopher/box/util"
 	"log"
 	"reflect"
 	"time"

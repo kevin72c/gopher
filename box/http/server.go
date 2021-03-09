@@ -1,8 +1,8 @@
 package http
 
 import (
-	"../client"
 	"fmt"
+	"gopher/box/client"
 	"net/http"
 )
 

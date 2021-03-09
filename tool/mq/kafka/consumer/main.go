@@ -12,9 +12,9 @@ func main() {
 	messageCountStart := 0
 	config := sarama.NewConfig()
 	config.Consumer.Return.Errors = true
-	config.Consumer.Offsets.AutoCommit.Enable = true
+	config.Consumer.Offsets.AutoCommit.Enable = false
 
-	brokers := []string{"192.168.2.14:9092"}
+	brokers := []string{"183.131.3.25:9093", "183.131.3.25:9094", "183.131.3.25:9095"}
 	master, err := sarama.NewConsumer(brokers, config)
 	if err != nil {
 		log.Panic(err)
@@ -24,7 +24,7 @@ func main() {
 			log.Panic(err)
 		}
 	}()
-	consumer, err := master.ConsumePartition("t1", 0, sarama.OffsetOldest)
+	consumer, err := master.ConsumePartition("computer-operation-31", 0, sarama.OffsetNewest)
 	if err != nil {
 		log.Panic(err)
 	}

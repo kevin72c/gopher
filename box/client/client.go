@@ -1,10 +1,10 @@
 package client
 
 import (
-	"../util"
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
+	"gopher/box/util"
 	"io"
 	"net"
 	"time"

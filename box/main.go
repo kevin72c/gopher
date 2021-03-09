@@ -1,8 +1,8 @@
 package main
 
 import (
-	_ "./client"
-	_ "./http"
+	_ "gopher/box/client"
+	_ "gopher/box/http"
 	"time"
 )
 

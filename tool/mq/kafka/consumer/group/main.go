@@ -25,29 +25,6 @@ var (
 	verbose  = false
 )
 
-//func init() {
-//	flag.StringVar(&brokers, "brokers", "", "Kafka bootstrap brokers to connect to, as a comma separated list")
-//	flag.StringVar(&group, "group", "", "Kafka consumer group definition")
-//	flag.StringVar(&version, "version", "2.1.1", "Kafka cluster version")
-//	flag.StringVar(&topics, "topics", "", "Kafka topics to be consumed, as a comma separated list")
-//	flag.StringVar(&assignor, "assignor", "range", "Consumer group partition assignment strategy (range, roundrobin, sticky)")
-//	flag.BoolVar(&oldest, "oldest", true, "Kafka consumer consume initial offset from oldest")
-//	flag.BoolVar(&verbose, "verbose", false, "Sarama logging")
-//	flag.Parse()
-//
-//	if len(brokers) == 0 {
-//		panic("no Kafka bootstrap brokers defined, please set the -brokers flag")
-//	}
-//
-//	if len(topics) == 0 {
-//		panic("no topics given to be consumed, please set the -topics flag")
-//	}
-//
-//	if len(group) == 0 {
-//		panic("no Kafka consumer group defined, please set the -group flag")
-//	}
-//}
-
 func main() {
 	log.Println("Starting a new Sarama consumer")
 
