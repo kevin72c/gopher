@@ -1,4 +1,4 @@
-package dingtalk
+package util
 
 import (
 	"bytes"
@@ -13,10 +13,14 @@ import (
 	"time"
 )
 
-func NewRobot(token, secret string) *Robot {
+type Robot struct {
+	token, secret string
+}
+
+func NewDefaultRobot() *Robot {
 	return &Robot{
-		token:  token,
-		secret: secret,
+		token:  "xxx",
+		secret: "xxx",
 	}
 }
 
@@ -26,10 +30,6 @@ func sign(t int64, secret string) string {
 	hmac256.Write([]byte(strToHash))
 	data := hmac256.Sum(nil)
 	return base64.StdEncoding.EncodeToString(data)
-}
-
-type Robot struct {
-	token, secret string
 }
 
 func (robot *Robot) SendMessage(msg interface{}) error {
