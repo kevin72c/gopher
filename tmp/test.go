@@ -1,35 +1,29 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"time"
+	"io/ioutil"
+	"net/http"
 )
 
+var url = flag.String("url", "", "环境参数")
+
 func main() {
-
-	c1 := make(chan int)
-	c2 := make(chan string)
-
-	go func() {
-		for i := 0; i < 1; i++ {
-			time.Sleep(100 * time.Millisecond)
-			c1 <- i
-			close(c1)
-		}
-	}()
-	go func() {
-		time.Sleep(2 * time.Second)
-		c2 <- "two"
-	}()
-
-	defer close(c1)
+	flag.Parse()
+	if *url == "" {
+		*url = "http://192.168.2.200"
+	}
+	count := 0
 
 	for {
-		select {
-		case msg1 := <-c1:
-			fmt.Println("received1", msg1)
-		case msg2 := <-c2:
-			fmt.Println("received2", msg2)
+		count++
+		response, err := http.Get(*url)
+		defer response.Body.Close()
+		if err != nil {
+			// handle error
 		}
+		ioutil.ReadAll(response.Body)
+		fmt.Println("请求地址：", *url, ";    请求次数：", count)
 	}
 }

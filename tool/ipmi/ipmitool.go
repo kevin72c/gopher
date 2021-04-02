@@ -18,7 +18,7 @@ type IPMIServer struct {
 func init() {
 	_, err := exec.LookPath("ipmitool")
 	if err != nil {
-		log.Fatal("You must install ipmitool before use this package")
+		log.Println("You must install ipmitool before use this package")
 	}
 }
 
